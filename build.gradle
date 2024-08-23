@@ -38,7 +38,7 @@ dependencies {
 	implementation 'org.modelmapper:modelmapper:3.2.0'
 	implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.6.0'
 	implementation group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '3.4.1'
-	implementation 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16'
+//	implementation 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16'
 }
 
 tasks.named('test') {
