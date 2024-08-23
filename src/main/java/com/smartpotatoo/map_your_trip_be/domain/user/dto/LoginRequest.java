@@ -5,11 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 
 @Data
-public class JoinRequest {
+public class LoginRequest {
     @NotEmpty
     private String username;
     @NotEmpty
     private String password;
-    @NotEmpty
-    private String nickname;
 }
