@@ -22,6 +22,9 @@ public class SchedulesEntity extends BaseEntity {
     @JoinColumn(name = "user_id", referencedColumnName = "username", nullable = false)
     private UsersEntity user;
 
+    @Column(name = "trip_name", nullable = false, length = 30)
+    private String tripName;
+
     @Column(nullable = false, length = 200)
     private String address;
 
