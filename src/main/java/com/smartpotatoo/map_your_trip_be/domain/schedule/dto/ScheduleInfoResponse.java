@@ -7,6 +7,7 @@ import lombok.Data;
 @Builder
 public class ScheduleInfoResponse {
     public int id;
+    public String tripName;
     public String nickname;
     public String address;
     public String startDate;
