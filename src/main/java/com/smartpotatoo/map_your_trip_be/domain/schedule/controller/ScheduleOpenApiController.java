@@ -1,11 +1,13 @@
 package com.smartpotatoo.map_your_trip_be.domain.schedule.controller;
 
 import com.smartpotatoo.map_your_trip_be.common.api.Api;
+import com.smartpotatoo.map_your_trip_be.domain.schedule.dto.ScheduleDetailInfoResponse;
 import com.smartpotatoo.map_your_trip_be.domain.schedule.dto.ScheduleInfoResponse;
 import com.smartpotatoo.map_your_trip_be.domain.schedule.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,9 +27,9 @@ public class ScheduleOpenApiController {
         return Api.OK(scheduleInfoResponseList);
     }
 
-    @GetMapping("/{scheduleId}")
-    public Api<List<ScheduleInfoResponse>> detailedScheduleInfoList(){
-        List<ScheduleInfoResponse> scheduleInfoResponseList = scheduleService.scheduleInfoList();
-        return Api.OK(scheduleInfoResponseList);
+    @GetMapping("/schedules/{scheduleId}")
+    public Api<ScheduleDetailInfoResponse> getScheduleDetail(@PathVariable int scheduleId) {
+        ScheduleDetailInfoResponse scheduleDetailResponse = scheduleService.getScheduleDetail(scheduleId);
+        return Api.OK(scheduleDetailResponse);
     }
 }
