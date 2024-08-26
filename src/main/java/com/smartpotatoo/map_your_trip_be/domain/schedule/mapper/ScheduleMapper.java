@@ -17,6 +17,7 @@ public class ScheduleMapper {
                 .map(it->{
                     return SchedulesEntity.builder()
                             .user(usersEntity)
+                            .tripName(addScheduleRequest.getTripName())
                             .address(addScheduleRequest.getAddress())
                             .endDate(addScheduleRequest.getEndDate())
                             .startDate(addScheduleRequest.getStartDate())
@@ -30,6 +31,7 @@ public class ScheduleMapper {
                 .map(it->{
                     return ScheduleInfoResponse.builder()
                             .id(schedulesEntity.getId())
+                            .tripName(schedulesEntity.getTripName())
                             .address(schedulesEntity.getAddress())
                             .nickname(schedulesEntity.getUser().getNickname())
                             .startDate(schedulesEntity.getStartDate())

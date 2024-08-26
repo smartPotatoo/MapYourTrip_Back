@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-//jwt가 필요없는 api의 경우 jwtRequestFilter에서 url을 계속 추가해주면서 예외처리를 해줘해서 앞에 open-api를 붙여 추가적인 작업이 없게 만들었습니다
+//jwt가 필요없는 api의 경우 jwtRequestFilter에서 url을 계속 추가해주면서 예외처리를 해줘야 해서 앞에 open-api를 붙여 추가적인 작업이 없게 만들었습니다
 @RequestMapping("/open-api")
 @Slf4j
 public class ScheduleOpenApiController {

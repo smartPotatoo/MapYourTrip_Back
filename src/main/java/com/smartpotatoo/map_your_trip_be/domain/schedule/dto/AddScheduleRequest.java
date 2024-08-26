@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class AddScheduleRequest {
+    public String tripName;
     public String address;
     public String startDate;
     public String endDate;

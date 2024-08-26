@@ -39,4 +39,6 @@ public class ScheduleServiceImpl implements ScheduleService{
                 .map(ScheduleMapper::toResponse).collect(Collectors.toList());
         return scheduleInfoResponseList;
     }
+
+
 }
