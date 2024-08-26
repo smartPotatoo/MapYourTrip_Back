@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface SchedulesDateRepository extends JpaRepository<SchedulesDateEntity, Integer> {
     // Optional<SchedulesDateEntity> findByScheduleIdAndDate(Long schedulesId, String date);
     List<SchedulesDateEntity> findByScheduleId(int scheduleId);
+    SchedulesDateEntity findById(int id);
 }
