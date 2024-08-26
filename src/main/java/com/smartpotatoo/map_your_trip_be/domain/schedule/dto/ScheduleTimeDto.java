@@ -4,7 +4,6 @@ import lombok.Data;
 
 @Data
 public class ScheduleTimeDto {
-    private Long schedulesDateId;
     private String startTime;
     private String endTime;
     private String name;

@@ -46,8 +46,8 @@ public class ScheduleServiceImpl implements ScheduleService{
 
     @Override
     public void addDetailedSchedule(AddDetailedScheduleRequest addDetailedScheduleRequest, String authorization) {
-        // 1. SchedulesDateEntity 저장 (이 부분은 이전과 동일)
         for (ScheduleDateDto dateDto : addDetailedScheduleRequest.getSchedulesDateList()) {
+            // 1. SchedulesDateEntity 저장
             SchedulesEntity schedulesEntity = schedulesRepository.findById(dateDto.getSchedulesId())
                     .orElseThrow(() -> new EntityNotFoundException("Schedule not found"));
 
@@ -57,27 +57,23 @@ public class ScheduleServiceImpl implements ScheduleService{
                     .content(dateDto.getContent())
                     .build();
 
-            // SchedulesDateEntity 저장
+            // 저장 후 ID가 생성된 SchedulesDateEntity
             schedulesDateRepository.save(schedulesDateEntity);
-        }
 
-        // 2. SchedulesTimeEntity 저장
-        for (ScheduleTimeDto timeDto : addDetailedScheduleRequest.getSchedulesTimeList()) {
-            // schedulesDateId를 이용해 SchedulesDateEntity를 조회
-            SchedulesDateEntity schedulesDateEntity = schedulesDateRepository.findById(timeDto.getSchedulesDateId())
-                    .orElseThrow(() -> new EntityNotFoundException("Schedule Date not found for ID: " + timeDto.getSchedulesDateId()));
+            // 2. SchedulesTimeEntity 저장
+            for (ScheduleTimeDto timeDto : dateDto.getTimes()) {
+                SchedulesTimeEntity schedulesTimeEntity = SchedulesTimeEntity.builder()
+                        .schedulesDate(schedulesDateEntity)
+                        .startTime(timeDto.getStartTime())
+                        .endTime(timeDto.getEndTime())
+                        .name(timeDto.getName())
+                        .address(timeDto.getAddress())
+                        .x(timeDto.getX())
+                        .y(timeDto.getY())
+                        .build();
 
-            SchedulesTimeEntity schedulesTimeEntity = SchedulesTimeEntity.builder()
-                    .schedulesDate(schedulesDateEntity)
-                    .startTime(timeDto.getStartTime())
-                    .endTime(timeDto.getEndTime())
-                    .name(timeDto.getName())
-                    .address(timeDto.getAddress())
-                    .x(timeDto.getX())
-                    .y(timeDto.getY())
-                    .build();
-
-            schedulesTimeRepository.save(schedulesTimeEntity);
+                schedulesTimeRepository.save(schedulesTimeEntity);
+            }
         }
     }
 }
