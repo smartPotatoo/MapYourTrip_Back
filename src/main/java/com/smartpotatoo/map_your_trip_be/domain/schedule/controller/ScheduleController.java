@@ -26,10 +26,11 @@ public class ScheduleController {
     }
 
     @PostMapping("/schedule/detail")
-    public Api<String> addScheduleDeatail(
+    public Api<String> addDetailedSchedule(
             @RequestBody AddDetailedScheduleRequest addDetailedScheduleRequest,
             @RequestHeader("Authorization") String authorization
             ){
-
+        scheduleService.addDetailedSchedule(addDetailedScheduleRequest, authorization);
+        return Api.OK("success");
     }
 }

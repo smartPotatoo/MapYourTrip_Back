@@ -2,10 +2,7 @@ package com.smartpotatoo.map_your_trip_be.entity.schedule;
 
 import com.smartpotatoo.map_your_trip_be.entity.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @Entity
@@ -13,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "schedules_time")
+@EqualsAndHashCode(callSuper = true)  // 부모 클래스의 equals/hashCode를 호출
 public class SchedulesTimeEntity extends BaseEntity {
 
     @ManyToOne
