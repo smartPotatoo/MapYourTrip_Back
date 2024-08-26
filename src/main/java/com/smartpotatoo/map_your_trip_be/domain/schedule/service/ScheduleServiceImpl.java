@@ -110,6 +110,7 @@ public class ScheduleServiceImpl implements ScheduleService{
                             .times(scheduleTimeResponses)
                             .build();
                 })
+
                 .collect(Collectors.toList());
 
         // 4. 최종 DTO 반환
