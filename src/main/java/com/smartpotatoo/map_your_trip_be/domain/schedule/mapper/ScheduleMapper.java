@@ -5,7 +5,10 @@ import com.smartpotatoo.map_your_trip_be.common.error.ErrorCode;
 import com.smartpotatoo.map_your_trip_be.common.exception.ApiException;
 import com.smartpotatoo.map_your_trip_be.domain.schedule.dto.AddScheduleRequest;
 import com.smartpotatoo.map_your_trip_be.domain.schedule.dto.ScheduleInfoResponse;
+import com.smartpotatoo.map_your_trip_be.domain.schedule.dto.ScheduleTimeDto;
+import com.smartpotatoo.map_your_trip_be.entity.schedule.SchedulesDateEntity;
 import com.smartpotatoo.map_your_trip_be.entity.schedule.SchedulesEntity;
+import com.smartpotatoo.map_your_trip_be.entity.schedule.SchedulesTimeEntity;
 import com.smartpotatoo.map_your_trip_be.entity.user.UsersEntity;
 
 import java.util.Optional;
