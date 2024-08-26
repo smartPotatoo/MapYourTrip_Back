@@ -3,3 +3,7 @@ spring:
     name: map_your_trip_be
   profiles:
     active: dev
+  flyway:
+    location: classpath:/db/migration/{vendor}
+    baselineOnMigrate: true
+    enabled: true
