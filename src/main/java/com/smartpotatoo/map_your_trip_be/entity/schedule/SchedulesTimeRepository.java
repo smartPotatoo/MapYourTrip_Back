@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface SchedulesTimeRepository extends JpaRepository<SchedulesTimeEntity, Long> {
+public interface SchedulesTimeRepository extends JpaRepository<SchedulesTimeEntity, Integer> {
 
-    List<SchedulesTimeEntity> findBySchedulesDateId(Long schedulesDateId);
+    List<SchedulesTimeEntity> findBySchedulesDateId(int schedulesDateId);
 }

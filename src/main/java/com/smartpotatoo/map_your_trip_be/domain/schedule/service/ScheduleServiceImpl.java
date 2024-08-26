@@ -80,17 +80,17 @@ public class ScheduleServiceImpl implements ScheduleService{
     @Override
     public ScheduleDetailInfoResponse getScheduleDetail(int scheduleId) {
         // 1. schedulesId로 SchedulesEntity 조회
-        SchedulesEntity schedulesEntity = schedulesRepository.findById((long) scheduleId)
+        SchedulesEntity schedulesEntity = schedulesRepository.findById(scheduleId)
                 .orElseThrow(() -> new EntityNotFoundException("Schedule not found"));
 
         // 2. schedulesId로 SchedulesDateEntity 조회
-        List<SchedulesDateEntity> schedulesDateEntities = schedulesDateRepository.findByScheduleId((long) schedulesEntity.getId());
+        List<SchedulesDateEntity> schedulesDateEntities = schedulesDateRepository.findByScheduleId(schedulesEntity.getId());
 
         // 3. 각 SchedulesDateEntity에 대한 SchedulesTimeEntity 조회
         List<ScheduleDateInfoResponse> scheduleDateResponses = schedulesDateEntities.stream()
                 .map(dateEntity -> {
                     // SchedulesTimeRepository를 사용해 세부 일정을 조회
-                    List<SchedulesTimeEntity> schedulesTimeEntities = schedulesTimeRepository.findBySchedulesDateId((long) dateEntity.getId());
+                    List<SchedulesTimeEntity> schedulesTimeEntities = schedulesTimeRepository.findBySchedulesDateId(dateEntity.getId());
 
                     List<ScheduleTimeInfoResponse> scheduleTimeResponses = schedulesTimeEntities.stream()
                             .map(timeEntity -> ScheduleTimeInfoResponse.builder()
