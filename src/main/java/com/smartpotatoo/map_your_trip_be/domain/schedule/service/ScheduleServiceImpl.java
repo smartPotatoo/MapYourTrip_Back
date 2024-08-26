@@ -10,7 +10,10 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,25 +46,37 @@ public class ScheduleServiceImpl implements ScheduleService{
 
     @Override
     public void addDetailedSchedule(AddDetailedScheduleRequest addDetailedScheduleRequest, String authorization) {
+        // 1. SchedulesDateEntity 저장 (이 부분은 이전과 동일)
         for (ScheduleDateDto dateDto : addDetailedScheduleRequest.getSchedulesDateList()) {
-            SchedulesEntity schedulesEntity = schedulesRepository.findById(dateDto.getSchedulesId()).orElseThrow(() -> new EntityNotFoundException("Schedule not found"));
-            SchedulesDateEntity schedulesDateEntity = new SchedulesDateEntity();
-            schedulesDateEntity.setSchedule(schedulesEntity);
-            schedulesDateEntity.setDate(dateDto.getDate());
-            schedulesDateEntity.setContent(dateDto.getContent());
+            SchedulesEntity schedulesEntity = schedulesRepository.findById(dateDto.getSchedulesId())
+                    .orElseThrow(() -> new EntityNotFoundException("Schedule not found"));
+
+            SchedulesDateEntity schedulesDateEntity = SchedulesDateEntity.builder()
+                    .schedule(schedulesEntity)
+                    .date(dateDto.getDate())
+                    .content(dateDto.getContent())
+                    .build();
+
+            // SchedulesDateEntity 저장
             schedulesDateRepository.save(schedulesDateEntity);
         }
 
+        // 2. SchedulesTimeEntity 저장
         for (ScheduleTimeDto timeDto : addDetailedScheduleRequest.getSchedulesTimeList()) {
-            SchedulesDateEntity schedulesDateEntity = schedulesDateRepository.findById(timeDto.getSchedulesDateId()).orElseThrow(() -> new EntityNotFoundException("Schedule Date not found"));
-            SchedulesTimeEntity schedulesTimeEntity = new SchedulesTimeEntity();
-            schedulesTimeEntity.setSchedulesDate(schedulesDateEntity);
-            schedulesTimeEntity.setStartTime(timeDto.getStartTime());
-            schedulesTimeEntity.setEndTime(timeDto.getEndTime());
-            schedulesTimeEntity.setName(timeDto.getName());
-            schedulesTimeEntity.setAddress(timeDto.getAddress());
-            schedulesTimeEntity.setX(timeDto.getX());
-            schedulesTimeEntity.setY(timeDto.getY());
+            // schedulesDateId를 이용해 SchedulesDateEntity를 조회
+            SchedulesDateEntity schedulesDateEntity = schedulesDateRepository.findById(timeDto.getSchedulesDateId())
+                    .orElseThrow(() -> new EntityNotFoundException("Schedule Date not found for ID: " + timeDto.getSchedulesDateId()));
+
+            SchedulesTimeEntity schedulesTimeEntity = SchedulesTimeEntity.builder()
+                    .schedulesDate(schedulesDateEntity)
+                    .startTime(timeDto.getStartTime())
+                    .endTime(timeDto.getEndTime())
+                    .name(timeDto.getName())
+                    .address(timeDto.getAddress())
+                    .x(timeDto.getX())
+                    .y(timeDto.getY())
+                    .build();
+
             schedulesTimeRepository.save(schedulesTimeEntity);
         }
     }
