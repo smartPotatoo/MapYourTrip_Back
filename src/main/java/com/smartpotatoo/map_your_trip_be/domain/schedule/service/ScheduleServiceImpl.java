@@ -47,11 +47,11 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
     @Override
-    public void addDetailedSchedule(AddDetailedScheduleRequest addDetailedScheduleRequest, String authorization) {
+    public void addDetailedSchedule(AddDetailedScheduleRequest addDetailedScheduleRequest, String authorization, int scheduleId) {
         for (ScheduleDateDto dateDto : addDetailedScheduleRequest.getSchedulesDateList()) {
+            dateDto.setSchedulesId(scheduleId);
             // 1. SchedulesDateEntity 저장
-            SchedulesEntity schedulesEntity = schedulesRepository.findById(dateDto.getSchedulesId())
-                    .orElseThrow(() -> new EntityNotFoundException("Schedule not found"));
+            SchedulesEntity schedulesEntity = schedulesRepository.findById(scheduleId);
 
             SchedulesDateEntity schedulesDateEntity = SchedulesDateEntity.builder()
                     .schedule(schedulesEntity)
@@ -82,8 +82,7 @@ public class ScheduleServiceImpl implements ScheduleService{
     @Override
     public ScheduleDetailInfoResponse getScheduleDetail(int scheduleId) {
         // 1. schedulesId로 SchedulesEntity 조회
-        SchedulesEntity schedulesEntity = schedulesRepository.findById(scheduleId)
-                .orElseThrow(() -> new EntityNotFoundException("Schedule not found"));
+        SchedulesEntity schedulesEntity = schedulesRepository.findById(scheduleId);
 
         // 2. schedulesId로 SchedulesDateEntity 조회
         List<SchedulesDateEntity> schedulesDateEntities = schedulesDateRepository.findByScheduleId(schedulesEntity.getId());
@@ -126,6 +125,7 @@ public class ScheduleServiceImpl implements ScheduleService{
                 .schedulesDateList(scheduleDateResponses)
                 .build();
     }
+
     @Override
     public void deleteSchedule(int schedulesId, String authorization) {
         //jwt에서 username 추출

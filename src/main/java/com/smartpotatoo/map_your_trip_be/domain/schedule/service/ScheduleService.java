@@ -14,6 +14,6 @@ public interface ScheduleService {
 
     //일정 삭제
     void deleteSchedule(int schedulesId,String authorization);
-    void addDetailedSchedule(AddDetailedScheduleRequest addDetailedScheduleRequest, String authorization);
+    void addDetailedSchedule(AddDetailedScheduleRequest addDetailedScheduleRequest, String authorization, int scheduleId);
     ScheduleDetailInfoResponse getScheduleDetail(int scheduleId);
 }

@@ -26,12 +26,13 @@ public class ScheduleController {
         return Api.OK("success");
     }
 
-    @PostMapping("/schedule/detail")
+    @PostMapping("/schedule/{scheduleId}")
     public Api<String> addDetailedSchedule(
             @RequestBody AddDetailedScheduleRequest addDetailedScheduleRequest,
-            @RequestHeader("Authorization") String authorization
+            @RequestHeader("Authorization") String authorization,
+            @PathVariable int scheduleId
             ){
-        scheduleService.addDetailedSchedule(addDetailedScheduleRequest, authorization);
+        scheduleService.addDetailedSchedule(addDetailedScheduleRequest, authorization, scheduleId);
         return Api.OK("success");
     }
 
