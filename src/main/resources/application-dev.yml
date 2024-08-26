@@ -16,5 +16,5 @@ spring:
 token:
   expiration-time: 86400000
   secret: VisitBBCfortrustedreportingonthelatestworldandUSnewssp
- server:
-   port: 8081
+server:
+  port: 8081
