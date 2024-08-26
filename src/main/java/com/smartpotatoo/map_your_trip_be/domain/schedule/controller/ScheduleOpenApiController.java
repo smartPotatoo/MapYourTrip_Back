@@ -24,4 +24,10 @@ public class ScheduleOpenApiController {
         List<ScheduleInfoResponse> scheduleInfoResponseList = scheduleService.scheduleInfoList();
         return Api.OK(scheduleInfoResponseList);
     }
+
+    @GetMapping("/{scheduleId}")
+    public Api<List<ScheduleInfoResponse>> detailedScheduleInfoList(){
+        List<ScheduleInfoResponse> scheduleInfoResponseList = scheduleService.scheduleInfoList();
+        return Api.OK(scheduleInfoResponseList);
+    }
 }
