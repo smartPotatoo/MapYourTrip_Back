@@ -7,4 +7,5 @@ import java.util.List;
 public interface SchedulesTimeRepository extends JpaRepository<SchedulesTimeEntity, Integer> {
 
     List<SchedulesTimeEntity> findBySchedulesDateId(int schedulesDateId);
+    void deleteBySchedulesDateId(int schedulesDateId);
 }

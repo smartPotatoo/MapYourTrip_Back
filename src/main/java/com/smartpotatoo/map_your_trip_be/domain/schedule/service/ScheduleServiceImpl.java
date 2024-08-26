@@ -11,6 +11,7 @@ import com.smartpotatoo.map_your_trip_be.entity.user.UsersEntity;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,6 +45,21 @@ public class ScheduleServiceImpl implements ScheduleService{
         List<ScheduleInfoResponse> scheduleInfoResponseList = schedulesEntityList.stream()
                 .map(ScheduleMapper::toResponse).collect(Collectors.toList());
         return scheduleInfoResponseList;
+    }
+
+    @Override
+    public void deleteSchedule(int schedulesId, String authorization) {
+        //jwt에서 username 추출
+        String token = authorization.substring(7);
+        String username = jwtUtils.getSubjectFromToken(token);
+
+        //user 확인
+        UsersEntity usersEntity = userRepository.findByUsername(username);
+        SchedulesEntity schedulesEntity = schedulesRepository.findById(schedulesId);
+        if(!usersEntity.getUsername().equals(schedulesEntity.getUser().getUsername())){
+            throw new ApiException(ErrorCode.BAD_REQUEST,"삭제 권한이 없습니다.");
+        }
+        schedulesRepository.delete(schedulesEntity);
     }
 
     @Override
@@ -127,20 +143,52 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
     @Override
-    public void deleteSchedule(int schedulesId, String authorization) {
-        //jwt에서 username 추출
+    @Transactional
+    public void updateDetailedSchedule(UpdateDetailedScheduleRequest updateDetailedScheduleRequest, String authorization, int scheduleId) {
+        // JWT에서 username 추출
         String token = authorization.substring(7);
         String username = jwtUtils.getSubjectFromToken(token);
-
-        //user 확인
         UsersEntity usersEntity = userRepository.findByUsername(username);
-        SchedulesEntity schedulesEntity = schedulesRepository.findById(schedulesId);
-        if(!usersEntity.getUsername().equals(schedulesEntity.getUser().getUsername())){
-            throw new ApiException(ErrorCode.BAD_REQUEST,"삭제 권한이 없습니다.");
+
+        // schedulesId로 SchedulesEntity 조회
+        SchedulesEntity schedulesEntity = schedulesRepository.findById(scheduleId);
+
+        // 권한 확인
+        if (!usersEntity.getUsername().equals(schedulesEntity.getUser().getUsername())) {
+            throw new ApiException(ErrorCode.BAD_REQUEST, "수정 권한이 없습니다.");
         }
-        schedulesRepository.delete(schedulesEntity);
 
+        // 해당 ScheduleId와 연관된 모든 SchedulesDateEntity와 관련된 SchedulesTimeEntity 삭제
+        List<SchedulesDateEntity> schedulesDateEntities = schedulesDateRepository.findByScheduleId(scheduleId);
+        for (SchedulesDateEntity dateEntity : schedulesDateEntities) {
+            // 먼저 관련된 SchedulesTimeEntity를 삭제
+            schedulesTimeRepository.deleteBySchedulesDateId(dateEntity.getId());
+            // 그 후 SchedulesDateEntity를 삭제
+            schedulesDateRepository.delete(dateEntity);
+        }
+
+        // 새로운 세부 일정 추가
+        for (UpdateScheduleDateDto dateDto : updateDetailedScheduleRequest.getSchedulesDateList()) {
+            SchedulesDateEntity schedulesDateEntity = SchedulesDateEntity.builder()
+                    .schedule(schedulesEntity)
+                    .date(dateDto.getDate())
+                    .content(dateDto.getContent())
+                    .build();
+            schedulesDateRepository.save(schedulesDateEntity);
+
+            for (UpdateScheduleTimeDto timeDto : dateDto.getTimes()) {
+                SchedulesTimeEntity schedulesTimeEntity = SchedulesTimeEntity.builder()
+                        .schedulesDate(schedulesDateEntity)
+                        .startTime(timeDto.getStartTime())
+                        .endTime(timeDto.getEndTime())
+                        .name(timeDto.getName())
+                        .address(timeDto.getAddress())
+                        .x(timeDto.getX())
+                        .y(timeDto.getY())
+                        .build();
+
+                schedulesTimeRepository.save(schedulesTimeEntity);
+            }
+        }
     }
-
-
 }
