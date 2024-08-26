@@ -1,6 +1,7 @@
 package com.smartpotatoo.map_your_trip_be.domain.schedule.controller;
 
 import com.smartpotatoo.map_your_trip_be.common.api.Api;
+import com.smartpotatoo.map_your_trip_be.domain.schedule.dto.AddDetailedScheduleRequest;
 import com.smartpotatoo.map_your_trip_be.domain.schedule.dto.AddScheduleRequest;
 import com.smartpotatoo.map_your_trip_be.domain.schedule.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
@@ -22,5 +23,13 @@ public class ScheduleController {
     ){
         scheduleService.addSchedule(addScheduleRequest,authorization);
         return Api.OK("success");
+    }
+
+    @PostMapping("/schedule/detail")
+    public Api<String> addScheduleDeatail(
+            @RequestBody AddDetailedScheduleRequest addDetailedScheduleRequest,
+            @RequestHeader("Authorization") String authorization
+            ){
+
     }
 }
