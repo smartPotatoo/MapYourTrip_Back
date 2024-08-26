@@ -1,6 +1,7 @@
 package com.smartpotatoo.map_your_trip_be.domain.schedule.controller;
 
 import com.smartpotatoo.map_your_trip_be.common.api.Api;
+import com.smartpotatoo.map_your_trip_be.domain.schedule.dto.AddDetailedScheduleRequest;
 import com.smartpotatoo.map_your_trip_be.domain.schedule.dto.AddScheduleRequest;
 import com.smartpotatoo.map_your_trip_be.domain.schedule.service.ScheduleService;
 import jakarta.websocket.server.PathParam;
@@ -22,6 +23,15 @@ public class ScheduleController {
             @RequestHeader("Authorization") String authorization
     ){
         scheduleService.addSchedule(addScheduleRequest,authorization);
+        return Api.OK("success");
+    }
+
+    @PostMapping("/schedule/detail")
+    public Api<String> addDetailedSchedule(
+            @RequestBody AddDetailedScheduleRequest addDetailedScheduleRequest,
+            @RequestHeader("Authorization") String authorization
+            ){
+        scheduleService.addDetailedSchedule(addDetailedScheduleRequest, authorization);
         return Api.OK("success");
     }
 
