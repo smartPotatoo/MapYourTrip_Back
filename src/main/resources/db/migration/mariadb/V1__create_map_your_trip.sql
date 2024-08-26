@@ -51,10 +51,10 @@ CREATE TABLE `schedules_time` (
   `y` varchar(200) NOT NULL
 )engine=InnoDB;;
 
-ALTER TABLE `schedules` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`username`);
+ALTER TABLE `schedules` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`username`)  ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE `users_picture` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`username`);
+ALTER TABLE `users_picture` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`username`)  ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE `schedules_date` ADD FOREIGN KEY (`schedules_id`) REFERENCES `schedules` (`id`);
+ALTER TABLE `schedules_date` ADD FOREIGN KEY (`schedules_id`) REFERENCES `schedules` (`id`)  ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE `schedules_time` ADD FOREIGN KEY (`schedules_date_id`) REFERENCES `schedules_date` (`id`);
+ALTER TABLE `schedules_time` ADD FOREIGN KEY (`schedules_date_id`) REFERENCES `schedules_date` (`id`)  ON DELETE CASCADE ON UPDATE CASCADE;

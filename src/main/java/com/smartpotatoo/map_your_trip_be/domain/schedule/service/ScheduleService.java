@@ -9,4 +9,7 @@ public interface ScheduleService {
     //일정 생성
     void addSchedule(AddScheduleRequest addScheduleRequest,String authorization);
     List<ScheduleInfoResponse> scheduleInfoList();
+
+    //일정 삭제
+    void deleteSchedule(int schedulesId,String authorization);
 }

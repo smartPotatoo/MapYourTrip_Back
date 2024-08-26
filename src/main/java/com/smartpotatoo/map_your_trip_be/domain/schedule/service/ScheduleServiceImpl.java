@@ -1,5 +1,7 @@
 package com.smartpotatoo.map_your_trip_be.domain.schedule.service;
 
+import com.smartpotatoo.map_your_trip_be.common.error.ErrorCode;
+import com.smartpotatoo.map_your_trip_be.common.exception.ApiException;
 import com.smartpotatoo.map_your_trip_be.common.utils.JwtUtils;
 import com.smartpotatoo.map_your_trip_be.domain.schedule.dto.AddScheduleRequest;
 import com.smartpotatoo.map_your_trip_be.domain.schedule.dto.ScheduleInfoResponse;
@@ -38,6 +40,22 @@ public class ScheduleServiceImpl implements ScheduleService{
         List<ScheduleInfoResponse> scheduleInfoResponseList = schedulesEntityList.stream()
                 .map(ScheduleMapper::toResponse).collect(Collectors.toList());
         return scheduleInfoResponseList;
+    }
+
+    @Override
+    public void deleteSchedule(int schedulesId, String authorization) {
+        //jwt에서 username 추출
+        String token = authorization.substring(7);
+        String username = jwtUtils.getSubjectFromToken(token);
+
+        //user 확인
+        UsersEntity usersEntity = userRepository.findByUsername(username);
+        SchedulesEntity schedulesEntity = schedulesRepository.findById(schedulesId);
+        if(!usersEntity.getUsername().equals(schedulesEntity.getUser().getUsername())){
+            throw new ApiException(ErrorCode.BAD_REQUEST,"삭제 권한이 없습니다.");
+        }
+        schedulesRepository.delete(schedulesEntity);
+
     }
 
 
