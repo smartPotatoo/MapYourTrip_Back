@@ -3,6 +3,7 @@ package com.smartpotatoo.map_your_trip_be.domain.user.controller;
 import com.smartpotatoo.map_your_trip_be.common.api.Api;
 import com.smartpotatoo.map_your_trip_be.common.utils.JwtUtils;
 import com.smartpotatoo.map_your_trip_be.domain.user.dto.UpdateProfileRequest;
+import com.smartpotatoo.map_your_trip_be.domain.user.dto.UserInfoResponse;
 import com.smartpotatoo.map_your_trip_be.domain.user.service.UserService;
 import com.smartpotatoo.map_your_trip_be.entity.user.UserPictureEntity;
 import com.smartpotatoo.map_your_trip_be.entity.user.UserPictureRepository;
@@ -28,6 +29,15 @@ public class UserController {
     private final JwtUtils jwtUtils;
     private final UserRepository userRepository;
     private final UserPictureRepository userPictureRepository;
+
+    // 마이페이지 조회
+    @GetMapping("/mypage")
+    public Api<UserInfoResponse> getProfile(
+            @RequestHeader("Authorization") String authorization
+    ){
+        UserInfoResponse userInfoResponse = userService.getProfile(authorization);
+        return Api.OK(userInfoResponse);
+    }
 
     // 프로필 업데이트(사진, 닉네임)
     @PutMapping("/mypage")
