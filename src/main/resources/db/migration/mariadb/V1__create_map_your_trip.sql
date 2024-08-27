@@ -7,7 +7,7 @@ DROP TABLE IF EXISTS schedules_time;
 CREATE TABLE `users` (
   `id` integer PRIMARY KEY AUTO_INCREMENT,
   `username` varchar(50) UNIQUE NOT NULL,
-  `nickname` varchar(50) NOT NULL,
+  `nickname` varchar(50) UNIQUE NOT NULL,
   `password` varchar(100) NOT NULL,
   `role` varchar(10) NOT NULL,
   `updated_at` datetime,
