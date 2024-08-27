@@ -37,6 +37,17 @@ public class UserServiceImpl implements UserService {
 
     //회원가입
     public void join(JoinRequest joinRequest){
+
+        // Check if username already exists
+        if (userRepository.existsByUsername(joinRequest.getUsername())) {
+            throw new ApiException(ErrorCode.BAD_REQUEST,"이미 존재하는 ID입니다.");
+        }
+
+        // Check if nickname already exists
+        if (userRepository.existsByNickname(joinRequest.getNickname())) {
+            throw new ApiException(ErrorCode.BAD_REQUEST,"이미 존재하는 닉네임입니다.");
+        }
+
         UsersEntity entity = UserMapper.toEntity(joinRequest);
         entity.setPassword(bCryptPasswordEncoder.encode(joinRequest.getPassword()));
         userRepository.save(entity);
