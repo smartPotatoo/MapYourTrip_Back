@@ -27,8 +27,9 @@ public class ScheduleOpenApiController {
         return Api.OK(scheduleInfoResponseList);
     }
 
-    @GetMapping("/schedules/{scheduleId}")
-    public Api<ScheduleDetailInfoResponse> getScheduleDetail(@PathVariable int scheduleId) {
+    // 세부 일정 조회
+    @GetMapping("/schedule/{scheduleId}/detail")
+    public Api<ScheduleDetailInfoResponse> getScheduleDetail(@PathVariable("scheduleId") int scheduleId) {
         ScheduleDetailInfoResponse scheduleDetailResponse = scheduleService.getScheduleDetail(scheduleId);
         return Api.OK(scheduleDetailResponse);
     }

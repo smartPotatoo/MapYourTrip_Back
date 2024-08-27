@@ -9,7 +9,6 @@ import java.util.List;
 @Builder
 public class ScheduleDateInfoResponse {
     private Long schedulesId;
-
     private String date;
     private String content;
     private List<ScheduleTimeInfoResponse> times;  // 세부 일정 리스트
