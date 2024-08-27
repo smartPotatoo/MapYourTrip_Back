@@ -6,6 +6,7 @@ import com.smartpotatoo.map_your_trip_be.common.exception.ApiException;
 import com.smartpotatoo.map_your_trip_be.domain.schedule.dto.AddScheduleRequest;
 import com.smartpotatoo.map_your_trip_be.domain.schedule.dto.ScheduleInfoResponse;
 import com.smartpotatoo.map_your_trip_be.domain.schedule.dto.ScheduleTimeDto;
+import com.smartpotatoo.map_your_trip_be.domain.schedule.dto.UpdateScheduleRequest;
 import com.smartpotatoo.map_your_trip_be.entity.schedule.SchedulesDateEntity;
 import com.smartpotatoo.map_your_trip_be.entity.schedule.SchedulesEntity;
 import com.smartpotatoo.map_your_trip_be.entity.schedule.SchedulesTimeEntity;
@@ -39,6 +40,20 @@ public class ScheduleMapper {
                             .nickname(schedulesEntity.getUser().getNickname())
                             .startDate(schedulesEntity.getStartDate())
                             .endDate(schedulesEntity.getEndDate())
+                            .build();
+                }).orElseThrow(()->new ApiException(ErrorCode.BAD_REQUEST));
+    }
+
+    //UpdateScheduleRequest to SchedulesEntity
+    public static SchedulesEntity toEntity(UpdateScheduleRequest updateScheduleRequest, UsersEntity usersEntity){
+        return Optional.ofNullable(updateScheduleRequest)
+                .map(it->{
+                    return SchedulesEntity.builder()
+                            .user(usersEntity)
+                            .tripName(updateScheduleRequest.getTripName())
+                            .address(updateScheduleRequest.getAddress())
+                            .endDate(updateScheduleRequest.getEndDate())
+                            .startDate(updateScheduleRequest.getStartDate())
                             .build();
                 }).orElseThrow(()->new ApiException(ErrorCode.BAD_REQUEST));
     }

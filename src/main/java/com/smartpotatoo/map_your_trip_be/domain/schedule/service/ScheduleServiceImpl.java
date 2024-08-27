@@ -8,15 +8,12 @@ import com.smartpotatoo.map_your_trip_be.domain.schedule.mapper.ScheduleMapper;
 import com.smartpotatoo.map_your_trip_be.entity.schedule.*;
 import com.smartpotatoo.map_your_trip_be.entity.user.UserRepository;
 import com.smartpotatoo.map_your_trip_be.entity.user.UsersEntity;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -45,6 +42,27 @@ public class ScheduleServiceImpl implements ScheduleService{
         List<ScheduleInfoResponse> scheduleInfoResponseList = schedulesEntityList.stream()
                 .map(ScheduleMapper::toResponse).collect(Collectors.toList());
         return scheduleInfoResponseList;
+    }
+
+    @Override
+    public void updateSchedule(UpdateScheduleRequest updateScheduleRequest, int schedulesId, String authorization) {
+        //jwt에서 username 추출
+        String token = authorization.substring(7);
+        String username = jwtUtils.getSubjectFromToken(token);
+        UsersEntity usersEntity = userRepository.findByUsername(username);
+
+        // user authentication
+        SchedulesEntity exitingSchedule = schedulesRepository.findById(schedulesId);
+        if(!exitingSchedule.getUser().getUsername().equals(username)){
+            throw new ApiException(ErrorCode.BAD_REQUEST,"수정 권한이 없습니다.");
+        }
+
+        exitingSchedule.setTripName(updateScheduleRequest.getTripName());
+        exitingSchedule.setAddress(updateScheduleRequest.getAddress());
+        exitingSchedule.setStartDate(updateScheduleRequest.getStartDate());
+        exitingSchedule.setEndDate(updateScheduleRequest.getEndDate());
+
+        schedulesRepository.save(exitingSchedule);
     }
 
     @Override
