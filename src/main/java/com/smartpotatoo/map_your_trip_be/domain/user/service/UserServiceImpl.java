@@ -4,11 +4,12 @@ import com.smartpotatoo.map_your_trip_be.common.error.ErrorCode;
 import com.smartpotatoo.map_your_trip_be.common.exception.ApiException;
 import com.smartpotatoo.map_your_trip_be.common.utils.FileUtils;
 import com.smartpotatoo.map_your_trip_be.common.utils.JwtUtils;
-import com.smartpotatoo.map_your_trip_be.domain.user.dto.JoinRequest;
-import com.smartpotatoo.map_your_trip_be.domain.user.dto.LoginRequest;
-import com.smartpotatoo.map_your_trip_be.domain.user.dto.LoginResponse;
-import com.smartpotatoo.map_your_trip_be.domain.user.dto.UpdateProfileRequest;
+import com.smartpotatoo.map_your_trip_be.domain.schedule.mapper.ScheduleMapper;
+import com.smartpotatoo.map_your_trip_be.domain.user.dto.*;
 import com.smartpotatoo.map_your_trip_be.domain.user.mapper.UserMapper;
+import com.smartpotatoo.map_your_trip_be.domain.user.mapper.UserPictureMapper;
+import com.smartpotatoo.map_your_trip_be.entity.schedule.SchedulesEntity;
+import com.smartpotatoo.map_your_trip_be.entity.schedule.SchedulesRepository;
 import com.smartpotatoo.map_your_trip_be.entity.user.UserPictureEntity;
 import com.smartpotatoo.map_your_trip_be.entity.user.UserPictureRepository;
 import com.smartpotatoo.map_your_trip_be.entity.user.UserRepository;
@@ -20,7 +21,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +33,7 @@ public class UserServiceImpl implements UserService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JwtUtils jwtUtils;
     private final FileUtils fileUtils;
+    private final SchedulesRepository schedulesRepository;
 
     //회원가입
     public void join(JoinRequest joinRequest){
@@ -83,5 +87,30 @@ public class UserServiceImpl implements UserService {
             userPicture.setCreatedAt(LocalDateTime.now());
             userPictureRepository.save(userPicture);
         }
+    }
+
+    @Override
+    public UserInfoResponse getProfile(String authorization) {
+        // 유저 정보 추출
+        String token = authorization.substring(7);
+        String username = jwtUtils.getSubjectFromToken(token);
+        UsersEntity user = userRepository.findByUsername(username);
+
+        // 닉네임 조회
+        UserInfoResponse userInfoResponse = new UserInfoResponse();
+        userInfoResponse.setNickname(user.getNickname());
+
+        // 프로필 사진 조회
+        UserPictureEntity userPictureEntity = userPictureRepository.findByUserId(user.getId()).orElse(new UserPictureEntity());
+        if(userPictureEntity.getUser() != null) {
+            userInfoResponse.setUserpicture(UserPictureMapper.toDto(userPictureEntity));
+        }
+
+        // 작성한 일정 목록 조회
+        List<SchedulesEntity> schedulesEntityList = schedulesRepository.findByUser_Username(username);
+        userInfoResponse.setScheduleInfoResponse(schedulesEntityList.stream()
+                .map(ScheduleMapper::toResponse).collect(Collectors.toList()));
+
+        return userInfoResponse;
     }
 }
