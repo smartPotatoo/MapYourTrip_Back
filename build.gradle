@@ -48,3 +48,14 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+jar {
+	archiveBaseName = 'map_your_trip-backend'
+	archiveVersion = ''
+}
+
+bootJar {
+	archiveBaseName = 'map_your_trip-backend'
+	archiveVersion = ''  // 버전 정보 제거
+	archiveClassifier = ''  // plain JAR가 아닌 동일한 이름으로 생성
+}
