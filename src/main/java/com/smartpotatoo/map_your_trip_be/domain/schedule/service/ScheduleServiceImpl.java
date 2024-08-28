@@ -27,13 +27,15 @@ public class ScheduleServiceImpl implements ScheduleService{
 
     //일정 생성
     @Override
-    public void addSchedule(AddScheduleRequest addScheduleRequest,String authorization) {
+    public ScheduleInfoResponse addSchedule(AddScheduleRequest addScheduleRequest,String authorization) {
         //jwt에서 username 추출
         String token = authorization.substring(7);
         String username = jwtUtils.getSubjectFromToken(token);
         UsersEntity usersEntity = userRepository.findByUsername(username);
         SchedulesEntity schedulesEntity = ScheduleMapper.toEntity(addScheduleRequest,usersEntity);
-        schedulesRepository.save(schedulesEntity);
+        SchedulesEntity newSchedulesEntity = schedulesRepository.save(schedulesEntity);
+        ScheduleInfoResponse scheduleInfoResponse = ScheduleMapper.toResponse(newSchedulesEntity);
+        return scheduleInfoResponse;
     }
 
     @Override

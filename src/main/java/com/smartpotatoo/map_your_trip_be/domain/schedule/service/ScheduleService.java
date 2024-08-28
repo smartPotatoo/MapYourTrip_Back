@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ScheduleService {
     //일정 생성
-    void addSchedule(AddScheduleRequest addScheduleRequest,String authorization);
+    ScheduleInfoResponse addSchedule(AddScheduleRequest addScheduleRequest,String authorization);
     // 일정 조회
     List<ScheduleInfoResponse> scheduleInfoList();
     // 일정 수정
