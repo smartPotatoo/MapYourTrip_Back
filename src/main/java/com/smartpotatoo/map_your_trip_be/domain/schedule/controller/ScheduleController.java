@@ -1,10 +1,7 @@
 package com.smartpotatoo.map_your_trip_be.domain.schedule.controller;
 
 import com.smartpotatoo.map_your_trip_be.common.api.Api;
-import com.smartpotatoo.map_your_trip_be.domain.schedule.dto.AddDetailedScheduleRequest;
-import com.smartpotatoo.map_your_trip_be.domain.schedule.dto.AddScheduleRequest;
-import com.smartpotatoo.map_your_trip_be.domain.schedule.dto.UpdateDetailedScheduleRequest;
-import com.smartpotatoo.map_your_trip_be.domain.schedule.dto.UpdateScheduleRequest;
+import com.smartpotatoo.map_your_trip_be.domain.schedule.dto.*;
 import com.smartpotatoo.map_your_trip_be.domain.schedule.service.ScheduleService;
 import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
@@ -20,12 +17,12 @@ public class ScheduleController {
 
     //일정 생성
     @PostMapping("/schedule")
-    public Api<String> addSchedule(
+    public Api<ScheduleInfoResponse> addSchedule(
             @RequestBody AddScheduleRequest addScheduleRequest,
             @RequestHeader("Authorization") String authorization
     ){
-        scheduleService.addSchedule(addScheduleRequest,authorization);
-        return Api.OK("success");
+        ScheduleInfoResponse scheduleInfoResponse = scheduleService.addSchedule(addScheduleRequest,authorization);
+        return Api.OK(scheduleInfoResponse);
     }
 
     // 일정 수정
