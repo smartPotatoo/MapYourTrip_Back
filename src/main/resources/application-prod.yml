@@ -14,12 +14,14 @@ spring:
       default_batch_fetch_size: 100
   servlet:
     multipart:
-      location: /opt/app/uploads
+      location: /home/storage/
       max-file-size: 10MB
       max-request-size: 10MB
 
 token:
   expiration-time: 86400000
-  secret: ${TOKEN_SECRET:VisitBBCfortrustedreportingonthelatestworldandUSnewssp}
+  secret: VisitBBCfortrustedreportingonthelatestworldandUSnewssp
 # server:
 #   port: 8081
+# VisitBBCfortrustedreportingonthelatestworldandUSnewssp
+# ${{secrets.DOCKER_TOKEN}}
