@@ -40,10 +40,10 @@ public class UserController {
     }
 
     // 프로필 업데이트(사진, 닉네임)
-    @PutMapping("/mypage")
+    @PatchMapping("/mypage")
     public Api<String> updateProfile(
-            @RequestPart("data") UpdateProfileRequest updateProfileRequest,
-            @RequestPart("file") MultipartFile file,
+            @RequestPart(value = "data") UpdateProfileRequest updateProfileRequest,
+            @RequestPart(value = "file", required = false) MultipartFile file,
             @RequestHeader("Authorization") String authorization
     ) throws Exception {
             userService.updateProfile(updateProfileRequest, file, authorization);

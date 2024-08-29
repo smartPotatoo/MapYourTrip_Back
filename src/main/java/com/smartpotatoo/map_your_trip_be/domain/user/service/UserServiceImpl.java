@@ -76,7 +76,12 @@ public class UserServiceImpl implements UserService {
         UsersEntity user = userRepository.findByUsername(username);
 
         // 닉네임 수정
-        user.setNickname(updateProfileRequest.getNickname());
+        if (updateProfileRequest.getNickname() != null) {
+            user.setNickname(updateProfileRequest.getNickname());
+        }
+
+        // DB에 유저 정보 업데이트
+        userRepository.save(user);
 
         // 프로필 이미지 파일 처리
         if (profileImage != null && !profileImage.isEmpty()) {
