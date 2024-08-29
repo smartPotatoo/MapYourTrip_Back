@@ -24,7 +24,6 @@ import java.nio.file.Paths;
 @RequiredArgsConstructor
 @RequestMapping
 @Slf4j
-@CrossOrigin("http://localhost:3000")
 public class UserController {
     private final UserService userService;
     private final JwtUtils jwtUtils;
