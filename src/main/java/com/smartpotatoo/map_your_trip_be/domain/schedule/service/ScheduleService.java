@@ -1,8 +1,10 @@
 package com.smartpotatoo.map_your_trip_be.domain.schedule.service;
 
 import com.smartpotatoo.map_your_trip_be.domain.schedule.dto.*;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ScheduleService {
     //일정 생성
@@ -19,4 +21,5 @@ public interface ScheduleService {
     ScheduleDetailInfoResponse getScheduleDetail(int scheduleId);
     // 세부 일정 수정
     void updateDetailedSchedule(UpdateDetailedScheduleRequest updateDetailedScheduleRequest, String authorization, int scheduleId);
+    MapAddressResponse search(String address);
 }
