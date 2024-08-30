@@ -9,10 +9,18 @@ import com.smartpotatoo.map_your_trip_be.entity.schedule.*;
 import com.smartpotatoo.map_your_trip_be.entity.user.UserRepository;
 import com.smartpotatoo.map_your_trip_be.entity.user.UsersEntity;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -211,4 +219,35 @@ public class ScheduleServiceImpl implements ScheduleService{
             }
         }
     }
+    @Override
+
+    public MapAddressResponse search(String addressName) {
+
+        ResponseEntity<Map> entity = naverApiSearch(addressName);
+        return ScheduleMapper.toResponse(entity);
+    }
+
+    public ResponseEntity<Map> naverApiSearch(String address) {
+        ByteBuffer buffer = StandardCharsets.UTF_8.encode(address);
+        String encode = StandardCharsets.UTF_8.decode(buffer).toString();
+
+        URI uri = UriComponentsBuilder
+                .fromUriString("https://naveropenapi.apigw.ntruss.com")
+                .path("/map-geocode/v2/geocode")
+                .queryParam("query",encode)
+                .encode()
+                .build()
+                .toUri();
+        RestTemplate restTemplate = new RestTemplate();
+
+        // 아래는 헤더를 넣기 위함
+        RequestEntity<Void> req = RequestEntity
+                .get(uri)
+                .header("X-NCP-APIGW-API-KEY-ID", "h5jkyu7feb")
+                .header("X-NCP-APIGW-API-KEY","IGREf26au32TRYd2IGZgn1qRcokIEdwzEvaco0QN")
+                .build();
+
+        return restTemplate.exchange(req, Map.class);
+    }
+
 }

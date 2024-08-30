@@ -25,6 +25,15 @@ public class ScheduleController {
         return Api.OK(scheduleInfoResponse);
     }
 
+    //지도 검색
+    @GetMapping("/search/{address}")
+    public Api<MapAddressResponse> search(
+            @PathVariable String address
+    ){
+        MapAddressResponse mapAddressResponse = scheduleService.search(address);
+        return Api.OK(mapAddressResponse);
+    }
+
     // 일정 수정
     @PutMapping("/schedule/{scheduleId}")
     public Api<String> updateSchedule(
